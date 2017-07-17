@@ -24,23 +24,18 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
   @ViewChild('menuContainer') public menuContainer: any;
 
   public availableMenuItems: NodeMenuItem[] = [
-    {
-      name: 'New tag',
+   {
+      name: '新增分组',
       action: NodeMenuItemAction.NewTag,
       cssClass: 'new-tag'
     },
     {
-      name: 'New folder',
-      action: NodeMenuItemAction.NewFolder,
-      cssClass: 'new-folder'
-    },
-    {
-      name: 'Rename',
+      name: '修改组名',
       action: NodeMenuItemAction.Rename,
       cssClass: 'rename'
     },
     {
-      name: 'Remove',
+      name: '删除分组',
       action: NodeMenuItemAction.Remove,
       cssClass: 'remove'
     }
