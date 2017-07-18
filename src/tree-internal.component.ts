@@ -33,7 +33,8 @@ import { Observable } from 'rxjs/Rx';
         <input type="text" class="node-value"
            *ngIf="shouldShowInputForTreeValue()"
            [nodeEditable]="tree.value"
-           (valueChanged)="applyNewValue($event)"/>
+           (valueChanged)="applyNewValue($event)"
+           />
 
         <div class="node-left-menu" *ngIf="tree.hasLeftMenu()" (click)="showLeftMenu($event)" [innerHTML]="tree.leftMenuTemplate">
         </div>
@@ -92,20 +93,19 @@ export class TreeInternalComponent implements OnInit {
   }
 
   private swapWithSibling(sibling: Tree, tree: Tree): void {
-    tree.swapWithSibling(sibling);
-    this.treeService.fireNodeMoved(sibling, sibling.parent);
+    this.treeService.fireNodeMoved(sibling, tree);
   }
 
   private moveNodeToThisTreeAndRemoveFromPreviousOne(e: NodeDraggableEvent, tree: Tree): void {
     this.treeService.fireNodeRemoved(e.captured.tree);
     const addedChild = tree.addChild(e.captured.tree);
-    this.treeService.fireNodeMoved(addedChild, e.captured.tree.parent);
+    this.treeService.fireNodeMoved(addedChild, tree);
   }
 
   private moveNodeToParentTreeAndRemoveFromPreviousOne(e: NodeDraggableEvent, tree: Tree): void {
     this.treeService.fireNodeRemoved(e.captured.tree);
     const addedSibling = tree.addSibling(e.captured.tree, tree.positionInParent);
-    this.treeService.fireNodeMoved(addedSibling, e.captured.tree.parent);
+    this.treeService.fireNodeMoved(addedSibling, tree);
   }
 
   public onNodeSelected(e: MouseEvent): void {
@@ -155,11 +155,22 @@ export class TreeInternalComponent implements OnInit {
       case NodeMenuItemAction.Remove:
         this.onRemoveSelected();
         break;
+      case NodeMenuItemAction.CreateTag:
+        this.onCreateTagSelected();
+        break;
+      case NodeMenuItemAction.RemoveTag:
+        this.onRemoveTagSelected();
+        break;
       default:
         throw new Error(`Chosen menu item doesn't exist`);
     }
   }
-
+  private onRemoveTagSelected(): void {
+    this.treeService.fireRemoveTag(this.tree);
+  }
+  private onCreateTagSelected(): void {
+    this.treeService.fireCreateTag(this.tree);
+  }
   private onNewSelected(e: NodeMenuItemSelectedEvent): void {
     this.tree.createNode(e.nodeMenuItemAction === NodeMenuItemAction.NewFolder);
     this.isRightMenuVisible = false;
@@ -201,7 +212,7 @@ export class TreeInternalComponent implements OnInit {
   }
 
   public shouldShowInputForTreeValue(): boolean {
-    return this.tree.isNew() || this.tree.isBeingRenamed();
+    return  (this.tree.isNew() || this.tree.isBeingRenamed()) && !this.tree.isRoot();
   }
 
   public isRootHidden(): boolean {
