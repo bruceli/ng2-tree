@@ -2,7 +2,9 @@ export enum NodeMenuItemAction {
   NewFolder,
   NewTag,
   Rename,
-  Remove
+  Remove,
+  RemoveTag,
+  CreateTag
 }
 
 export enum NodeMenuAction {
