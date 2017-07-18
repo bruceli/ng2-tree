@@ -53,3 +53,13 @@ export class NodeCollapsedEvent extends NodeEvent {
     super(node);
   }
 }
+export class NodeRemoveTagEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
+export class NodeCreateTagEvent extends NodeEvent {
+  public constructor(node: Tree) {
+    super(node);
+  }
+}
