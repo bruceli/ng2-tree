@@ -5,7 +5,9 @@ import {
   NodeSelectedEvent,
   NodeMovedEvent,
   NodeExpandedEvent,
-  NodeCollapsedEvent
+  NodeCollapsedEvent,
+  NodeRemoveTagEvent,
+  NodeCreateTagEvent
 } from './tree.events';
 import { RenamableNode } from './tree.types';
 import { Tree } from './tree';
@@ -23,11 +25,18 @@ export class TreeService {
   public nodeSelected$: Subject<NodeSelectedEvent> = new Subject<NodeSelectedEvent>();
   public nodeExpanded$: Subject<NodeExpandedEvent> = new Subject<NodeExpandedEvent>();
   public nodeCollapsed$: Subject<NodeCollapsedEvent> = new Subject<NodeCollapsedEvent>();
-
+  public nodeRemoveTag$: Subject<NodeRemoveTagEvent> = new Subject<NodeRemoveTagEvent>();
+  public nodeCreateTag$: Subject<NodeCreateTagEvent> = new Subject<NodeCreateTagEvent>();
   public constructor(@Inject(NodeDraggableService) private nodeDraggableService: NodeDraggableService) {
     this.nodeRemoved$.subscribe((e: NodeRemovedEvent) => e.node.removeItselfFromParent());
   }
 
+  public fireCreateTag(tree: Tree): void {
+    this.nodeCreateTag$.next(new NodeCreateTagEvent(tree));
+  }
+  public fireRemoveTag(tree: Tree): void {
+    this.nodeRemoveTag$.next(new NodeRemoveTagEvent(tree));
+  }
   public unselectStream(tree: Tree): Observable<any> {
     return this.nodeSelected$.filter((e: NodeSelectedEvent) => tree !== e.node);
   }
