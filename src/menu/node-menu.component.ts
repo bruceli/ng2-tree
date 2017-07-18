@@ -26,7 +26,7 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
   public availableMenuItems: NodeMenuItem[] = [
     {
       name: '新增分组',
-      action: NodeMenuItemAction.NewTag,
+      action: NodeMenuItemAction.CreateTag,
       cssClass: 'new-tag'
     },
     {
@@ -36,7 +36,7 @@ export class NodeMenuComponent implements OnInit, OnDestroy {
     },
     {
       name: '删除分组',
-      action: NodeMenuItemAction.Remove,
+      action: NodeMenuItemAction.RemoveTag,
       cssClass: 'remove'
     }
   ];
